@@ -3,12 +3,14 @@
 require 'account'
 
 describe Account do
+
   it 'Initialises with a balance of 0' do
     expect(subject.balance).to eq 0
   end
 
   it 'Prints expected statement when there have been no transactions' do
-    expect { subject.print_statement }.to output('date || credit || debit || balance').to_stdout
+    expect(STDOUT).to receive(:puts).with('date || credit || debit || balance')
+    subject.print_statement
   end
 
   it 'Has the correct balance after a single credit' do
@@ -28,6 +30,7 @@ describe Account do
   end
 
   it 'If a transaction would take the account\'s balance below 0 a warning message is printed' do
-    expect { subject.debit(500) }.to output('The previous transaction has been cancelled as it would take the account\'s balance below 0').to_stdout
+    expect(STDOUT).to receive(:puts).with('The previous transaction has been cancelled as it would take the account\'s balance below 0')
+    subject.debit(500)
   end
 end
