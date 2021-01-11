@@ -13,7 +13,9 @@ class Account
     record_transaction(amount, date)
   end
 
-  def debit(amount, date = Time.now.strftime('%Y/%m/%d'))
+  def debit(amount, date = Time.now.strftime('%d/%m/%Y'))
+    return unless valid_date?(date)
+    
     reduce_balance(amount, date) if enough_money?(amount)
   end
 
