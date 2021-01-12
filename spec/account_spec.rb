@@ -18,7 +18,7 @@ describe Account do
       subject.withdraw(-1000)
     end
 
-    it "Account_tools receives correct message when valid parameters given" do
+    it 'Account_tools receives correct message when valid parameters given' do
       expect(mock_account_tools).to receive(:change_balance).with(-1000, anything)
       subject.withdraw(1000)
     end
@@ -31,13 +31,13 @@ describe Account do
       subject.add(-1000)
     end
 
-    it "Account_tools receives correct message when valid parameters given" do
+    it 'Account_tools receives correct message when valid parameters given' do
       expect(mock_account_tools).to receive(:change_balance).with(1000, anything)
       subject.add(1000)
     end
   end
 
-  it "Account_tools receives correct message when balance is called" do
+  it 'Account_tools receives correct message when balance is called' do
     expect(mock_account_tools).to receive(:print_statement)
     subject.statement
   end

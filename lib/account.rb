@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 class Account
-
-  def initialize (accountTools = AccountTools.new)
-    @account_tools = accountTools
+  def initialize(account_tools = AccountTools.new)
+    @account_tools = account_tools
   end
 
   def balance

@@ -23,15 +23,15 @@ describe AccountTools do
       expect(subject.balance).to eq 0
     end
 
-    it "The balance of the account cannot be reduced below 0" do
+    it 'The balance of the account cannot be reduced below 0' do
       subject.change_balance(-500)
       expect(subject.balance).to eq 0
     end
 
     it 'If a transaction would take the account\'s balance below 0 a warning message is printed' do
-        expect(STDOUT).to receive(:puts).with('The previous transaction has been cancelled as it would take the account\'s balance below 0')
-        subject.change_balance(-500)
-      end
+      expect(STDOUT).to receive(:puts).with('The previous transaction has been cancelled as it would take the account\'s balance below 0')
+      subject.change_balance(-500)
+    end
   end
 
   describe '#print_statement' do
