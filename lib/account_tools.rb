@@ -12,32 +12,12 @@ class AccountTools
     return print_invalid_date_message() unless valid_date?(date)
 
     if enough_money?(amount)
-      @balance -= amount
-      record_transaction(-1 * amount, date)
+      @balance += amount
+      record_transaction(amount, date)
     else
       print_insufficient_balance_message
     end
   end
-
-  # def credit(amount, date = Time.now.strftime('%d/%m/%Y'))
-  #   return print_invalid_date_message() unless valid_date?(date)
-  #
-  #   @balance += amount
-  #   record_transaction(amount, date)
-  # end
-  #
-  # def debit(amount, date = Time.now.strftime('%d/%m/%Y'))
-  #   return print_negative_amount_message() unless amount.positive?
-  #
-  #   return print_invalid_date_message() unless valid_date?(date)
-  #
-  #   if enough_money?(amount)
-  #     @balance -= amount
-  #     record_transaction(-1 * amount, date)
-  #   else
-  #     print_insufficient_balance_message
-  #   end
-  # end
 
   def print_statement
     statement = 'date || credit || debit || balance'
@@ -52,11 +32,6 @@ class AccountTools
   end
 
   private
-
-  def reduce_balance(amount, date)
-    @balance -= amount
-    record_transaction(-1 * amount, date)
-  end
 
   def record_transaction(amount, date)
     @transactions << [amount, date, @balance]
