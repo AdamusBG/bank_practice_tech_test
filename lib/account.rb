@@ -2,7 +2,7 @@
 
 class Account
 
-  def initialize (acccountTools = AccountTools.new)
+  def initialize (accountTools = AccountTools.new)
     @account_tools = accountTools
   end
 
