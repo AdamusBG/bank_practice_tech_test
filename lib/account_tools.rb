@@ -8,18 +8,7 @@ class AccountTools
     @transactions = []
   end
 
-  def credit(amount, date = Time.now.strftime('%d/%m/%Y'))
-    return print_negative_amount_message() unless amount.positive?
-
-    return print_invalid_date_message() unless valid_date?(date)
-
-    @balance += amount
-    record_transaction(amount, date)
-  end
-
-  def debit(amount, date = Time.now.strftime('%d/%m/%Y'))
-    return print_negative_amount_message() unless amount.positive?
-
+  def change_balance(amount, date = Time.now.strftime('%d/%m/%Y'))
     return print_invalid_date_message() unless valid_date?(date)
 
     if enough_money?(amount)
@@ -29,6 +18,26 @@ class AccountTools
       print_insufficient_balance_message
     end
   end
+
+  # def credit(amount, date = Time.now.strftime('%d/%m/%Y'))
+  #   return print_invalid_date_message() unless valid_date?(date)
+  #
+  #   @balance += amount
+  #   record_transaction(amount, date)
+  # end
+  #
+  # def debit(amount, date = Time.now.strftime('%d/%m/%Y'))
+  #   return print_negative_amount_message() unless amount.positive?
+  #
+  #   return print_invalid_date_message() unless valid_date?(date)
+  #
+  #   if enough_money?(amount)
+  #     @balance -= amount
+  #     record_transaction(-1 * amount, date)
+  #   else
+  #     print_insufficient_balance_message
+  #   end
+  # end
 
   def print_statement
     statement = 'date || credit || debit || balance'
@@ -62,8 +71,8 @@ class AccountTools
     !!Time.new(split_date[2], split_date[1], split_date[0]) rescue false
   end
 
-  def enough_money?(to_deduct)
-    @balance - to_deduct >= 0
+  def enough_money?(amount)
+    @balance + amount >= 0
   end
 
   def print_insufficient_balance_message
@@ -72,9 +81,5 @@ class AccountTools
 
   def print_invalid_date_message
     puts 'The previous transaction was cancelled as the date was invalid, ensure a valid date is given in DD/MM/YYYY format'
-  end
-
-  def print_negative_amount_message
-    puts 'The previous transaction has been cancelled as a negative amount was given, please try again with a positive amount'
   end
 end
