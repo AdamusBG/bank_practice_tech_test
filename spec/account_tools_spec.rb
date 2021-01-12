@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'account'
+require 'account_tools'
 
-describe Account do
+describe AccountTools do
   it 'Initialises with a balance of 0' do
     expect(subject.balance).to eq 0
   end

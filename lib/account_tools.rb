@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Account
+class AccountTools
   attr_reader :balance
 
   def initialize
@@ -9,16 +9,25 @@ class Account
   end
 
   def credit(amount, date = Time.now.strftime('%d/%m/%Y'))
-    return unless valid_date?(date)
+    return print_negative_amount_message() unless amount.positive?
+
+    return print_invalid_date_message() unless valid_date?(date)
 
     @balance += amount
     record_transaction(amount, date)
   end
 
   def debit(amount, date = Time.now.strftime('%d/%m/%Y'))
-    return unless valid_date?(date)
+    return print_negative_amount_message() unless amount.positive?
 
-    reduce_balance(amount, date) if enough_money?(amount)
+    return print_invalid_date_message() unless valid_date?(date)
+
+    if enough_money?(amount)
+      @balance -= amount
+      record_transaction(-1 * amount, date)
+    else
+      print_insufficient_balance_message
+    end
   end
 
   def print_statement
@@ -50,15 +59,11 @@ class Account
     return false unless date[2] == '/' && date[5] == '/'
 
     split_date = date.split('/')
-    return_value = !!Time.new(split_date[2], split_date[1], split_date[0]) rescue false
-    print_invalid_date_message unless return_value
-    return_value
+    !!Time.new(split_date[2], split_date[1], split_date[0]) rescue false
   end
 
   def enough_money?(to_deduct)
-    return_value = @balance - to_deduct >= 0
-    print_insufficient_balance_message unless return_value
-    return_value
+    @balance - to_deduct >= 0
   end
 
   def print_insufficient_balance_message
@@ -67,5 +72,9 @@ class Account
 
   def print_invalid_date_message
     puts 'The previous transaction was cancelled as the date was invalid, ensure a valid date is given in DD/MM/YYYY format'
+  end
+
+  def print_negative_amount_message
+    puts 'The previous transaction has been cancelled as a negative amount was given, please try again with a positive amount'
   end
 end
