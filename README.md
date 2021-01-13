@@ -68,7 +68,7 @@ This was the class diagram which I created when planning, in the full program th
 
 ## Code quality
 
-I have written 17 Rspec tests, covering 100% of the code.
+I have written 17 Rspec tests, covering 100% of the code. To run the tests, navigate into the bank_practice_tech_test directory from your terminal and enter `rspec`.  
 
 ![Test coverage](./images/test_coverage.png)
 
