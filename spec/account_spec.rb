@@ -3,42 +3,74 @@
 require 'account'
 
 describe Account do
-  let(:mock_account_tools) { double :mock_account_tools }
-  subject { Account.new(mock_account_tools) }
+  let(:mock_account_printer) { double :mock_account_printer }
+  let(:transaction_class_double) { double :transaction_class }
+  let(:mock_transaction) { double :mock_transaction }
+  subject { Account.new(mock_account_printer, transaction_class_double) }
 
-  it 'Account_tools receives correct message when balance is called' do
-    expect(mock_account_tools).to receive(:balance)
-    subject.balance
+  before do
+    allow(transaction_class_double).to receive(:new).and_return(mock_transaction)
+    allow(mock_transaction).to receive(:get_date_as_string).and_return("01/01/2021")
   end
 
-  describe '#withdraw' do
-    it 'A message is printed and no message sent to account_tools when a negative balance is given' do
-      expect(STDOUT).to receive(:puts).with('The previous transaction has been cancelled as a negative amount was given, please try again with a positive amount')
-      expect(mock_account_tools).to_not receive(:change_balance)
-      subject.withdraw(-1000)
-    end
-
-    it 'Account_tools receives correct message when valid parameters given' do
-      expect(mock_account_tools).to receive(:change_balance).with(-1000, anything)
-      subject.withdraw(1000)
-    end
+  it 'Initializes with initial balance of 0' do
+    expect(subject.balance).to eq 0
   end
 
   describe '#add' do
-    it 'A message is printed and no message sent to account_tools when a negative balance is given' do
-      expect(STDOUT).to receive(:puts).with('The previous transaction has been cancelled as a negative amount was given, please try again with a positive amount')
-      expect(mock_account_tools).to_not receive(:change_balance)
+    it 'Account_printer sent correct message when called with negative amount' do
+      expect(mock_account_printer).to receive(:print_negative_amount_message)
       subject.add(-1000)
     end
 
-    it 'Account_tools receives correct message when valid parameters given' do
-      expect(mock_account_tools).to receive(:change_balance).with(1000, anything)
+    it 'Account_printer sent correct message when called with invalid date' do
+      expect(mock_account_printer).to receive(:print_invalid_date_message)
+      subject.add(1000, "01/13/2021")
+    end
+
+    it 'Balance correct after one call' do
+      subject.add(1000)
+      expect(subject.balance).to eq 1000
+    end
+
+    it 'Transactions correctly stored' do
+      expect(transaction_class_double).to receive(:new)
       subject.add(1000)
     end
   end
 
-  it 'Account_tools receives correct message when balance is called' do
-    expect(mock_account_tools).to receive(:print_statement)
+  describe '#withdraw' do
+    it 'Account_printer sent correct message when called with negative amount' do
+      expect(mock_account_printer).to receive(:print_negative_amount_message)
+      subject.withdraw(-1000)
+    end
+
+    it 'Account_printer sent correct message when called with invalid date' do
+      expect(mock_account_printer).to receive(:print_invalid_date_message)
+      subject.add(1000, "01/01/2021")
+      subject.withdraw(500, "01/13/2021")
+    end
+
+    it 'Account_printer sent correct message when transaction would take balance below 0' do
+      expect(mock_account_printer).to receive(:print_insufficient_balance_message)
+      subject.withdraw(1000)
+    end
+
+    it 'Balance correct after one call, following a #add call' do
+      subject.add(1000)
+      subject.withdraw(500)
+      expect(subject.balance).to eq 500
+    end
+
+    it 'Transactions correctly stored' do
+      subject.add(1000)
+      expect(transaction_class_double).to receive(:new)
+      subject.withdraw(500)
+    end
+  end
+
+  it 'Account_printer receives correct message when #statement called' do
+    expect(mock_account_printer).to receive(:print_statement)
     subject.statement
   end
 end
