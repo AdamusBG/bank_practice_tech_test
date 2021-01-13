@@ -20,21 +20,23 @@ The require statements below must be entered for the program to work, the rest i
 
 ```
 2.7.0 :001 > require './lib/account.rb'
+
+2.7.0 :002 > require './lib/account_printer.rb'
  => true
-2.7.0 :002 > require './lib/account_tools.rb'
+2.7.0 :003 > require './lib/transaction.rb'
  => true
-2.7.0 :003 > my_account = Account.new
- => #<Account:0x00007fe23c3a4690 @account_tools=#<AccountTools:0x00007fe23c3a4640 @balance=0, @transactions=[]>>
-2.7.0 :004 > my_account.add(1000)
- => [[1000, "12/01/2021", 1000]]
-2.7.0 :005 > my_account.withdraw(500)
- => [[1000, "12/01/2021", 1000], [-500, "12/01/2021", 500]]
-2.7.0 :006 > my_account.balance
+2.7.0 :004 > my_account = Account.new
+ => #<Account:0x00007f91d...
+2.7.0 :005 > my_account.add(1000)
+ => [#<Transaction:0x00007...
+2.7.0 :006 > my_account.withdraw(500)
+ => [#<Transaction:0x00007...
+2.7.0 :007 > my_account.balance
  => 500
-2.7.0 :007 > my_account.statement
+2.7.0 :008 > my_account.statement
 date || credit || debit || balance
-12/01/2021 || || 500.00 || 500.00
-12/01/2021 || 1000.00 || || 1000.00
+13/01/2021 || 1000.00 || || 1000.00
+13/01/2021 || || 500.00 || 500.00
  => nil
 ```
 
@@ -68,7 +70,7 @@ This was the class diagram which I created when planning, in the full program th
 
 ## Code quality
 
-I have written 17 Rspec tests, covering 100% of the code. To run the tests, navigate into the bank_practice_tech_test directory from your terminal and enter `rspec`.  
+I have written 27 Rspec tests, covering 100% of the code as well as several feature tests to prove the program works as a whole. To run the tests, navigate into the bank_practice_tech_test directory from your terminal and enter `rspec`.  
 
 ![Test coverage](./images/test_coverage.png)
 
@@ -76,5 +78,6 @@ The program is written to account for the following edge cases, with test covera
 * Negative withdrawals and deposits are blocked.  
 * Withdrawals that would take the account below 0 balance are blocked.  
 * Invalid dates given for transactions are blocked.
+* Transactions will be sorted into correct order automatically.
 
 I have ensured that the code is readable and understandable by following ruby conventions - tested using the RuboCop linter.
