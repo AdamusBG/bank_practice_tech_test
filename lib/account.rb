@@ -10,13 +10,13 @@ class Account
   end
 
   def withdraw(amount, date = Time.now.strftime('%d/%m/%Y'))
-    return print_negative_amount_message() unless amount.positive?
+    return print_negative_amount_message unless amount.positive?
 
     @account_tools.change_balance(-1 * amount, date)
   end
 
   def add(amount, date = Time.now.strftime('%d/%m/%Y'))
-    return print_negative_amount_message() unless amount.positive?
+    return print_negative_amount_message unless amount.positive?
 
     @account_tools.change_balance(amount, date)
   end

@@ -9,7 +9,7 @@ class AccountTools
   end
 
   def change_balance(amount, date = Time.now.strftime('%d/%m/%Y'))
-    return print_invalid_date_message() unless valid_date?(date)
+    return print_invalid_date_message unless valid_date?(date)
 
     if enough_money?(amount)
       @balance += amount
